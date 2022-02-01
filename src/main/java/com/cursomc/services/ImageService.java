@@ -9,6 +9,7 @@ import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
+import org.imgscalr.Scalr;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,6 +50,21 @@ public class ImageService {
 		} catch (Exception e) {
 			throw new FileException("Erro ao ler arquivo");
 		}
+	}
+	
+	public BufferedImage cropSquare(BufferedImage sourceImg) {
+		//Condição ternaria (condição1 <= condição2) ? retorno1 : retorno2
+		int min = (sourceImg.getHeight() <= sourceImg.getWidth()) ? sourceImg.getHeight() : sourceImg.getWidth();
+		return Scalr.crop(
+				sourceImg,
+				(sourceImg.getWidth()/2) - (min/2),
+				(sourceImg.getHeight()/2) - (min/2),
+				min,
+				min);
+	}
+	
+	public BufferedImage resize(BufferedImage sourceImg, int size) {
+		return Scalr.resize(sourceImg, Scalr.Method.ULTRA_QUALITY, size);
 	}
 	
 }
